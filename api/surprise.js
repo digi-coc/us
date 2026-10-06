@@ -55,11 +55,20 @@ module.exports = (req, res) => {
 
     try {
 
-        const day = calculateDay();
+       const currentDay = calculateDay();
 
-        const surprise =
-            getSurpriseForDay(day);
+const requestedDay =
+    Number(req.query?.day);
 
+const day =
+    Number.isInteger(requestedDay) &&
+    requestedDay >= 1 &&
+    requestedDay <= currentDay
+        ? requestedDay
+        : currentDay;
+
+const surprise =
+    getSurpriseForDay(day);
         if (!surprise) {
 
             return res.status(404).json({
