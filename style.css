@@ -1,0 +1,1382 @@
+/* =========================================================
+   SHRU & SHRAVYA
+   Main stylesheet
+========================================================= */
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    min-height: 100vh;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #fffaf0;
+    color: #5c4632;
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 226, 132, 0.22),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(255, 211, 102, 0.18),
+            transparent 30%
+        ),
+        #fffaf0;
+}
+
+
+.floating-hearts {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
+}
+
+
+.floating-hearts span {
+    position: absolute;
+    color: rgba(214, 166, 58, 0.18);
+    font-size: 24px;
+    animation: floatHeart 12s infinite ease-in-out;
+}
+
+
+.floating-hearts span:nth-child(1) {
+    left: 8%;
+    top: 18%;
+}
+
+
+.floating-hearts span:nth-child(2) {
+    left: 24%;
+    top: 75%;
+    animation-delay: 2s;
+}
+
+
+.floating-hearts span:nth-child(3) {
+    left: 48%;
+    top: 12%;
+    animation-delay: 4s;
+}
+
+
+.floating-hearts span:nth-child(4) {
+    left: 70%;
+    top: 80%;
+    animation-delay: 1s;
+}
+
+
+.floating-hearts span:nth-child(5) {
+    left: 87%;
+    top: 28%;
+    animation-delay: 5s;
+}
+
+
+.floating-hearts span:nth-child(6) {
+    left: 58%;
+    top: 52%;
+    animation-delay: 3s;
+}
+
+
+@keyframes floatHeart {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.2;
+    }
+
+    50% {
+        transform: translateY(-25px) rotate(8deg);
+        opacity: 0.45;
+    }
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.top-bar {
+    position: fixed;
+    top: 18px;
+    left: 20px;
+    right: 20px;
+
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    z-index: 1000;
+
+    /*
+       IMPORTANT:
+       The parent used to have pointer-events:none.
+       We keep it disabled generally and explicitly
+       enable interaction on the actual controls below.
+    */
+    pointer-events: none;
+}
+
+
+.day-counter {
+    pointer-events: auto;
+
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+
+    padding: 9px 14px;
+
+    border: 1px solid rgba(168, 126, 43, 0.18);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(10px);
+
+    box-shadow: 0 5px 20px rgba(120, 88, 30, 0.08);
+
+    color: #80601f;
+}
+
+
+.day-counter-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+
+#dayNumber {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+
+.day-counter-total {
+    font-size: 11px;
+    opacity: 0.65;
+}
+
+
+.countdown-container {
+    pointer-events: auto;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+
+    padding: 7px 16px;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.62);
+    backdrop-filter: blur(10px);
+
+    box-shadow: 0 4px 16px rgba(120, 88, 30, 0.05);
+}
+
+
+.countdown-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #9a7a3c;
+}
+
+
+.countdown-time {
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #72551f;
+}
+
+
+/* =========================================================
+   TOP RIGHT BUTTONS
+========================================================= */
+
+.top-bar-actions {
+    pointer-events: auto;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    z-index: 1001;
+}
+
+
+.icon-button,
+.music-toggle {
+    pointer-events: auto;
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(168, 126, 43, 0.18);
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.82);
+
+    color: #80601f;
+
+    font-size: 19px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 18px rgba(120, 88, 30, 0.10);
+
+    backdrop-filter: blur(10px);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.icon-button:hover,
+.music-toggle:hover {
+    transform: translateY(-2px) scale(1.04);
+
+    background: #fffdf7;
+
+    box-shadow:
+        0 8px 22px rgba(120, 88, 30, 0.16);
+}
+
+
+.icon-button:active,
+.music-toggle:active {
+    transform: scale(0.94);
+}
+
+
+/* =========================================================
+   SCREENS
+========================================================= */
+
+.screen {
+    min-height: 100vh;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 110px 20px 60px;
+
+    position: relative;
+}
+
+
+.screen.active {
+    display: flex;
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+.home-content {
+    position: relative;
+
+    width: 100%;
+    max-width: 850px;
+
+    min-height: 650px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+.home-text {
+    position: relative;
+    z-index: 3;
+}
+
+
+.tiny-intro {
+    margin-bottom: 12px;
+
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+
+    color: #a4874a;
+}
+
+
+.home-text h1 {
+    font-size: clamp(42px, 7vw, 76px);
+
+    font-weight: normal;
+
+    color: #60472e;
+
+    margin-bottom: 12px;
+
+    letter-spacing: -1px;
+}
+
+
+.home-subtitle {
+    font-size: 18px;
+    color: #806b50;
+}
+
+
+/* =========================================================
+   PANDAS
+========================================================= */
+
+.panda {
+    position: absolute;
+
+    font-size: 70px;
+
+    z-index: 1;
+
+    filter: drop-shadow(
+        0 8px 8px rgba(80, 50, 20, 0.08)
+    );
+
+    animation: pandaFloat 4s ease-in-out infinite;
+}
+
+
+.panda-left {
+    left: 7%;
+    top: 28%;
+}
+
+
+.panda-right {
+    right: 7%;
+    top: 48%;
+
+    animation-delay: 1.2s;
+}
+
+
+.panda-small {
+    font-size: 45px;
+
+    margin-bottom: 12px;
+
+    animation: pandaFloat 3.5s ease-in-out infinite;
+}
+
+
+@keyframes pandaFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+
+/* =========================================================
+   PRESENT
+========================================================= */
+
+.present {
+    position: relative;
+
+    width: 170px;
+    height: 150px;
+
+    margin-top: 45px;
+    margin-bottom: 25px;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.present:hover {
+    transform: translateY(-5px);
+}
+
+
+.present:active {
+    transform: scale(0.97);
+}
+
+
+.present-shadow {
+    position: absolute;
+
+    bottom: -8px;
+    left: 20px;
+    right: 20px;
+
+    height: 20px;
+
+    background: rgba(80, 50, 20, 0.12);
+
+    border-radius: 50%;
+
+    filter: blur(7px);
+}
+
+
+.present-box {
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+    bottom: 5px;
+
+    height: 100px;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent 42%,
+            #d9a83e 42%,
+            #d9a83e 58%,
+            transparent 58%
+        ),
+        #f1c75b;
+
+    box-shadow:
+        inset 0 -8px 0 rgba(130, 90, 20, 0.08),
+        0 10px 25px rgba(120, 88, 30, 0.16);
+}
+
+
+.present-lid {
+    position: absolute;
+
+    left: 7px;
+    right: 7px;
+    top: 30px;
+
+    height: 32px;
+
+    border-radius: 7px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent 42%,
+            #d9a83e 42%,
+            #d9a83e 58%,
+            transparent 58%
+        ),
+        #f6d579;
+
+    z-index: 3;
+
+    box-shadow:
+        0 6px 10px rgba(120, 88, 30, 0.15);
+}
+
+
+.lid-ribbon {
+    position: absolute;
+
+    left: 42%;
+    width: 16%;
+    top: 0;
+    bottom: 0;
+
+    background: #d9a83e;
+}
+
+
+.bow {
+    position: absolute;
+
+    top: -25px;
+    left: 50%;
+
+    width: 65px;
+    height: 45px;
+
+    transform: translateX(-50%);
+}
+
+
+.bow-left,
+.bow-right {
+    position: absolute;
+
+    width: 34px;
+    height: 28px;
+
+    background: #e2b547;
+
+    border-radius: 60% 40% 60% 40%;
+}
+
+
+.bow-left {
+    left: 0;
+    transform: rotate(-25deg);
+}
+
+
+.bow-right {
+    right: 0;
+    transform: rotate(25deg);
+}
+
+
+.bow-center {
+    position: absolute;
+
+    left: 50%;
+    top: 10px;
+
+    width: 17px;
+    height: 17px;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: #c7972f;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.main-button,
+.secondary-button {
+    font-family: Georgia, "Times New Roman", serif;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.main-button {
+    border: none;
+
+    padding: 14px 25px;
+
+    border-radius: 999px;
+
+    background: #80601f;
+
+    color: white;
+
+    font-size: 12px;
+
+    letter-spacing: 1.5px;
+
+    box-shadow:
+        0 8px 20px rgba(100, 70, 20, 0.18);
+}
+
+
+.main-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 11px 25px rgba(100, 70, 20, 0.23);
+}
+
+
+.main-button:active {
+    transform: scale(0.97);
+}
+
+
+.secondary-button {
+    border: 1px solid rgba(128, 96, 31, 0.25);
+
+    padding: 11px 20px;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.8);
+
+    color: #80601f;
+
+    font-size: 13px;
+
+    box-shadow:
+        0 5px 15px rgba(120, 88, 30, 0.08);
+}
+
+
+.secondary-button:hover {
+    transform: translateY(-2px);
+
+    background: white;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   SURPRISE SCREEN
+========================================================= */
+
+.surprise-section {
+    width: 100%;
+    max-width: 700px;
+
+    padding: 45px 25px;
+
+    text-align: center;
+
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, 0.60);
+
+    box-shadow:
+        0 15px 50px rgba(120, 88, 30, 0.07);
+
+    backdrop-filter: blur(10px);
+}
+
+
+.surprise-day-label {
+    margin-bottom: 10px;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+    color: #a4874a;
+}
+
+
+.surprise-section h2 {
+    font-size: clamp(30px, 5vw, 46px);
+
+    font-weight: normal;
+
+    color: #60472e;
+
+    margin-bottom: 12px;
+}
+
+
+.surprise-description {
+    max-width: 500px;
+
+    margin: 0 auto 25px;
+
+    color: #806b50;
+
+    line-height: 1.7;
+}
+
+
+.surprise-content {
+    margin: 25px auto;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   PORTAL
+========================================================= */
+
+.portal-section {
+    text-align: center;
+}
+
+
+.portal-section h2 {
+    margin-top: 25px;
+
+    font-size: 30px;
+
+    font-weight: normal;
+
+    color: #60472e;
+}
+
+
+.portal-section p {
+    margin-top: 10px;
+
+    color: #806b50;
+}
+
+
+.portal-small-text {
+    font-size: 14px;
+}
+
+
+.magic-portal {
+    position: relative;
+
+    width: 230px;
+    height: 230px;
+
+    margin: 20px auto;
+}
+
+
+.portal-ring {
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(218, 174, 70, 0.5);
+
+    animation: portalSpin 4s linear infinite;
+}
+
+
+.ring-two {
+    inset: 20px;
+
+    animation-duration: 3s;
+    animation-direction: reverse;
+}
+
+
+.ring-three {
+    inset: 42px;
+
+    animation-duration: 2s;
+}
+
+
+.memory-object-preview {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background: white;
+
+    font-size: 38px;
+
+    box-shadow:
+        0 12px 30px rgba(120, 88, 30, 0.16);
+
+    animation: memoryFloat 1.8s ease-in-out infinite;
+}
+
+
+@keyframes portalSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+@keyframes memoryFloat {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) translateY(0);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) translateY(-12px);
+    }
+}
+
+
+/* =========================================================
+   MEMORY SCREEN
+========================================================= */
+
+/*
+   IMPORTANT FIX:
+   The old screen was vertically centering the entire
+   Memory Box section. Since the box is tall, the Back
+   button could end up below the visible viewport.
+
+   We start the Memory Box screen from the top instead.
+*/
+
+#memoryScreen {
+    align-items: flex-start;
+
+    justify-content: center;
+
+    overflow-y: auto;
+
+    padding-top: 105px;
+    padding-bottom: 45px;
+}
+
+
+.memory-section {
+    width: 100%;
+    max-width: 1000px;
+
+    text-align: center;
+
+    padding-bottom: 20px;
+}
+
+
+.memory-heading {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 15px;
+
+    margin-bottom: 8px;
+}
+
+
+.memory-panda {
+    font-size: 48px;
+
+    animation: pandaFloat 3.5s ease-in-out infinite;
+}
+
+
+.memory-small-title {
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+    color: #a4874a;
+
+    margin-bottom: 3px;
+}
+
+
+.memory-heading h2 {
+    font-size: clamp(32px, 5vw, 48px);
+
+    font-weight: normal;
+
+    color: #60472e;
+}
+
+
+.memory-description {
+    margin-bottom: 20px;
+
+    color: #806b50;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   MEMORY BOX
+========================================================= */
+
+.memory-box {
+    position: relative;
+
+    width: 100%;
+
+    height: min(570px, 62vh);
+
+    min-height: 390px;
+
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    border: 2px solid rgba(172, 131, 47, 0.18);
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            rgba(255, 230, 143, 0.25),
+            transparent 25%
+        ),
+        rgba(255, 255, 255, 0.62);
+
+    box-shadow:
+        inset 0 0 50px rgba(190, 151, 70, 0.06),
+        0 15px 45px rgba(120, 88, 30, 0.08);
+
+    backdrop-filter: blur(8px);
+}
+
+
+.memory-box::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 12px;
+
+    border: 1px dashed rgba(172, 131, 47, 0.18);
+
+    border-radius: 22px;
+
+    pointer-events: none;
+}
+
+
+.memory-box-inside {
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   EMPTY MEMORY STATE
+========================================================= */
+
+.empty-memory-message {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 90%;
+
+    text-align: center;
+
+    color: #90785a;
+
+    pointer-events: none;
+}
+
+
+.empty-memory-icon {
+    font-size: 45px;
+
+    margin-bottom: 12px;
+
+    opacity: 0.8;
+}
+
+
+.empty-memory-message p {
+    font-size: 19px;
+
+    margin-bottom: 5px;
+}
+
+
+.empty-memory-message span {
+    font-size: 13px;
+
+    opacity: 0.75;
+}
+
+
+/* =========================================================
+   MEMORY OBJECTS
+========================================================= */
+
+.memory-object {
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.88);
+
+    font-size: 38px;
+
+    cursor: grab;
+
+    user-select: none;
+
+    touch-action: none;
+
+    box-shadow:
+        0 9px 20px rgba(120, 88, 30, 0.12);
+
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.memory-object:hover {
+    transform: translateY(-4px) rotate(2deg);
+
+    box-shadow:
+        0 14px 25px rgba(120, 88, 30, 0.17);
+}
+
+
+.memory-object:active {
+    cursor: grabbing;
+}
+
+
+.memory-object.dragging {
+    z-index: 100;
+
+    cursor: grabbing;
+
+    transform: scale(1.08) rotate(-3deg);
+
+    box-shadow:
+        0 20px 35px rgba(120, 88, 30, 0.2);
+}
+
+
+/* =========================================================
+   MEMORY BACK BUTTON
+========================================================= */
+
+.memory-back-area {
+    display: flex;
+
+    justify-content: center;
+
+    width: 100%;
+
+    margin-top: 22px;
+
+    padding-bottom: 5px;
+}
+
+
+.memory-back-button {
+    position: relative;
+
+    z-index: 20;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 42px;
+}
+
+
+/* =========================================================
+   LETTER INTERACTION
+========================================================= */
+
+.letter-envelope {
+    max-width: 520px;
+
+    margin: 0 auto;
+
+    cursor: pointer;
+}
+
+
+.envelope {
+    position: relative;
+
+    width: 100%;
+    max-width: 420px;
+
+    min-height: 240px;
+
+    margin: 0 auto;
+
+    border-radius: 15px;
+
+    background: #f4d77e;
+
+    box-shadow:
+        0 15px 35px rgba(120, 88, 30, 0.14);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+
+.envelope.opened {
+    min-height: auto;
+
+    padding: 25px;
+
+    background: #fffdf5;
+}
+
+
+.letter {
+    text-align: left;
+
+    line-height: 1.8;
+
+    color: #654d35;
+}
+
+
+.letter h3 {
+    margin-bottom: 18px;
+
+    color: #60472e;
+
+    font-weight: normal;
+}
+
+
+.letter p {
+    margin-bottom: 14px;
+}
+
+
+.letter-signature {
+    margin-top: 20px;
+
+    white-space: pre-line;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .top-bar {
+        left: 12px;
+        right: 12px;
+
+        top: 12px;
+    }
+
+
+    .day-counter {
+        padding: 7px 10px;
+    }
+
+
+    .countdown-container {
+        top: 60px;
+
+        left: 50%;
+
+        transform: translateX(-50%);
+
+        white-space: nowrap;
+    }
+
+
+    .top-bar-actions {
+        gap: 6px;
+    }
+
+
+    .icon-button,
+    .music-toggle {
+        width: 40px;
+        height: 40px;
+
+        font-size: 17px;
+    }
+
+
+    .home-content {
+        min-height: 600px;
+    }
+
+
+    .panda {
+        font-size: 50px;
+    }
+
+
+    .panda-left {
+        left: 2%;
+    }
+
+
+    .panda-right {
+        right: 2%;
+    }
+
+
+    .home-text h1 {
+        font-size: 45px;
+    }
+
+
+    .home-subtitle {
+        font-size: 16px;
+    }
+
+
+    .memory-box {
+        height: 55vh;
+
+        min-height: 340px;
+    }
+
+
+    .memory-object {
+        width: 75px;
+        height: 75px;
+
+        font-size: 31px;
+    }
+
+
+    .memory-heading h2 {
+        font-size: 34px;
+    }
+
+
+    .memory-panda {
+        font-size: 38px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .top-bar {
+        height: 50px;
+    }
+
+
+    .day-counter-label {
+        display: none;
+    }
+
+
+    .day-counter-total {
+        display: none;
+    }
+
+
+    .countdown-container {
+        top: 58px;
+    }
+
+
+    .home-content {
+        min-height: 570px;
+    }
+
+
+    .panda-left,
+    .panda-right {
+        opacity: 0.65;
+    }
+
+
+    .panda-left {
+        left: -4%;
+    }
+
+
+    .panda-right {
+        right: -4%;
+    }
+
+
+    .memory-box {
+        border-radius: 22px;
+    }
+
+
+    .memory-back-area {
+        margin-top: 18px;
+    }
+
+}
