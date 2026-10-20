@@ -58,7 +58,6 @@ const dayNumber =
 const countdownTimer =
     document.getElementById("countdownTimer");
 
-
 const surpriseTitle =
     document.getElementById("surpriseTitle");
 
@@ -519,7 +518,9 @@ function renderSurprise(surprise) {
     surpriseContent.innerHTML = "";
 
     switch (surprise.type) {
-
+case "timeline":
+    renderTimeline(surprise);
+    break;
         case "letter":
             renderLetter(surprise);
             break;
@@ -533,6 +534,13 @@ function renderSurprise(surprise) {
             renderFlower(surprise);
             break;
 
+        case "compliment-vault":
+    renderComplimentVault(surprise);
+    break;
+
+case "picnic":
+    renderPicnic(surprise);
+    break;
         case "heart-game":
             renderHeartGame(surprise);
             break;
@@ -557,9 +565,17 @@ function renderSurprise(surprise) {
             renderPuzzle(surprise);
             break;
 
-        default:
-            renderFutureSurprise(surprise);
-            break;
+       case "love-cards":
+    renderLoveCards(surprise);
+    break;
+
+case "mystery-box":
+    renderMysteryBox(surprise);
+    break;
+
+default:
+    renderFutureSurprise(surprise);
+    break;
     }
 }
 
@@ -590,360 +606,237 @@ function createButton(text, callback) {
 ============================================================ */
 
 function renderLetter(surprise) {
+    surpriseContent.innerHTML = `
+        <div class="letter-surprise">
+            <div class="letter-envelope" id="letterEnvelope">
+                💌
+            </div>
 
-    const letter =
-        surprise.letter;
+            <h3>${surprise.title || "Things You Do That Are Ridiculously Cute ♡"}</h3>
 
-    if (!letter) {
-        renderFutureSurprise(surprise);
-        return;
-    }
+            <button class="surprise-action" id="openLetterButton">
+                Open my letter 💌
+            </button>
 
-    const wrapper =
-        document.createElement("div");
+            <div id="letterContent" class="letter-content">
+                ${surprise.message || surprise.description || "I wrote this just for you. ♡"}
+            </div>
+        </div>
+    `;
 
-    wrapper.className =
-        "letter-card";
+    const envelope = document.getElementById("letterEnvelope");
+    const button = document.getElementById("openLetterButton");
+    const letterContent = document.getElementById("letterContent");
 
-    const envelope =
-        document.createElement("div");
+    letterContent.style.display = "none";
 
-    envelope.className =
-        "letter-envelope";
+    button.addEventListener("click", () => {
+        envelope.classList.add("letter-open");
 
-    envelope.textContent =
-        letter.envelopeText ||
-        "For you ♡";
+        letterContent.style.display = "block";
 
-    wrapper.appendChild(envelope);
+        button.textContent = "Letter opened ♡";
+        button.disabled = true;
 
-    const greeting =
-        document.createElement("h3");
+        completeSurpriseButton.disabled = false;
+    });
 
-    greeting.textContent =
-        letter.greeting || "";
-
-    wrapper.appendChild(greeting);
-
-    (letter.paragraphs || [])
-        .forEach(paragraph => {
-
-            const p =
-                document.createElement("p");
-
-            p.textContent =
-                paragraph;
-
-            wrapper.appendChild(p);
-        });
-
-    const signature =
-        document.createElement("p");
-
-    signature.className =
-        "letter-signature";
-
-    signature.textContent =
-        letter.signature || "";
-
-    wrapper.appendChild(signature);
-
-    surpriseContent.appendChild(
-        wrapper
-    );
+    completeSurpriseButton.disabled = true;
 }
-
-
 /* ============================================================
    CHOICE SURPRISE
 ============================================================ */
 
 function renderChoice(surprise) {
+    const choices = surprise.choices || [];
 
-    const wrapper =
-        document.createElement("div");
+    surpriseContent.innerHTML = `
+        <div class="choice-surprise">
+            <div class="choice-icon">💌</div>
 
-    wrapper.className =
-        "choice-container";
+            <h3>${surprise.title || "Choose my mood ♡"}</h3>
 
-    const result =
-        document.createElement("p");
+            <div class="choice-options">
+                ${choices.map((choice, index) => `
+                    <button
+                        class="choice-option"
+                        data-index="${index}"
+                    >
+                        ${choice.label || choice.text || `Choice ${index + 1}`}
+                    </button>
+                `).join("")}
+            </div>
 
-    result.className =
-        "choice-result";
+            <div id="choiceResult" class="mini-message"></div>
+        </div>
+    `;
 
-    result.textContent =
-        "Choose one ♡";
+    const buttons = document.querySelectorAll(".choice-option");
+    const result = document.getElementById("choiceResult");
 
-    wrapper.appendChild(result);
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            const index = Number(button.dataset.index);
+            const selected = choices[index];
 
-    (surprise.choices || [])
-        .forEach(choice => {
+            buttons.forEach(item => {
+                item.disabled = true;
+            });
 
-            const button =
-                createButton(
-                    choice.text,
-                    () => {
+            button.classList.add("selected");
 
-                        result.textContent =
-                            choice.result;
+            result.textContent =
+                selected.result || "Okay, it's a date! ♡";
 
-                        wrapper
-                            .querySelectorAll("button")
-                            .forEach(
-                                btn => {
-                                    btn.disabled =
-                                        true;
-                                }
-                            );
-                    }
-                );
-
-            wrapper.appendChild(
-                button
-            );
+            completeSurpriseButton.disabled = false;
         });
+    });
 
-    surpriseContent.appendChild(
-        wrapper
-    );
+    completeSurpriseButton.disabled = true;
 }
-
 
 /* ============================================================
    FLOWER
 ============================================================ */
-
 function renderFlower(surprise) {
+    const flower = surprise.flower || {};
 
-    const flower =
-        surprise.flower;
+    surpriseContent.innerHTML = `
+        <div class="flower-surprise">
+            <div class="flower-bud" id="flowerBud">🌱</div>
 
-    if (!flower) {
-        renderFutureSurprise(surprise);
-        return;
-    }
+            <h3>${flower.name || "Our Little Flower"}</h3>
 
-    const wrapper =
-        document.createElement("div");
+            <p>${flower.description || "Something small that will grow with us. ♡"}</p>
 
-    wrapper.className =
-        "flower-container";
+            <button class="surprise-action" id="growFlowerButton">
+                Help it bloom 🌼
+            </button>
 
-    const icon =
-        document.createElement("div");
+            <div id="flowerMessage" class="mini-message"></div>
+        </div>
+    `;
 
-    icon.className =
-        "flower-display";
+    const growButton = document.getElementById("growFlowerButton");
+    const flowerBud = document.getElementById("flowerBud");
+    const flowerMessage = document.getElementById("flowerMessage");
 
-    icon.textContent =
-        flower.stages?.[0]?.icon ||
-        "🌱";
+    growButton.addEventListener("click", () => {
+        flowerBud.textContent = "🌼";
+        flowerBud.classList.add("flower-bloom");
 
-    wrapper.appendChild(icon);
+        flowerMessage.textContent =
+            "Look at our little flower. It started tiny, just like us. ♡";
 
-    const message =
-        document.createElement("p");
+        growButton.textContent = "It bloomed! 🌼";
+        growButton.disabled = true;
 
-    message.textContent =
-        flower.stages?.[0]?.message ||
-        "Something is growing...";
+        completeSurpriseButton.disabled = false;
+    });
 
-    wrapper.appendChild(message);
-
-    const button =
-        createButton(
-            "CARE FOR MY FLOWER 🌱",
-            () => {
-
-                let stage =
-                    Number(
-                        wrapper.dataset.stage || 0
-                    );
-
-                stage =
-                    Math.min(
-                        stage + 1,
-                        flower.stages.length - 1
-                    );
-
-                wrapper.dataset.stage =
-                    String(stage);
-
-                icon.textContent =
-                    flower.stages[stage].icon;
-
-                message.textContent =
-                    flower.stages[stage].message;
-
-                if (
-                    stage ===
-                    flower.stages.length - 1
-                ) {
-
-                    button.textContent =
-                        "SHE'S PRESERVED FOREVER ♡";
-
-                    button.disabled = true;
-                }
-            }
-        );
-
-    wrapper.appendChild(button);
-
-    surpriseContent.appendChild(
-        wrapper
-    );
+    completeSurpriseButton.disabled = true;
 }
-
 
 /* ============================================================
    HEART GAME
 ============================================================ */
 
 function renderHeartGame(surprise) {
+    surpriseContent.innerHTML = `
+        <div class="heart-game">
+            <div class="game-icon">💛</div>
 
-    const game =
-        surprise.game || {
-            target: 10,
-            message: "You caught them all ♡"
-        };
+            <h3>Catch 10 hearts!</h3>
+            <p>Click every heart before it disappears. 👀</p>
 
-    const wrapper =
-        document.createElement("div");
+            <div id="heartGameArea" class="heart-game-area"></div>
 
-    wrapper.className =
-        "heart-game";
+            <div id="heartGameStatus" class="mini-message">
+                Hearts caught: 0 / 10
+            </div>
+        </div>
+    `;
 
-    const score =
-        document.createElement("p");
-
-    score.textContent =
-        `Hearts caught: 0 / ${game.target}`;
-
-    wrapper.appendChild(score);
-
-    const playArea =
-        document.createElement("div");
-
-    playArea.className =
-        "heart-game-area";
-
-    wrapper.appendChild(playArea);
+    const area = document.getElementById("heartGameArea");
+    const status = document.getElementById("heartGameStatus");
 
     let caught = 0;
 
-    function spawnHeart() {
+    function createHeart() {
+        if (caught >= 10) return;
 
-        if (caught >= game.target) {
-            return;
-        }
-
-        const heart =
-            document.createElement("button");
-
-        heart.type = "button";
-        heart.className =
-            "game-heart";
-
+        const heart = document.createElement("button");
         heart.textContent = "💛";
+        heart.className = "game-heart";
 
-        heart.style.left =
-            `${10 + Math.random() * 80}%`;
+        heart.style.left = `${Math.random() * 80 + 5}%`;
+        heart.style.top = `${Math.random() * 70 + 5}%`;
 
-        heart.style.top =
-            `${10 + Math.random() * 70}%`;
+        heart.addEventListener("click", () => {
+            caught++;
 
-        heart.addEventListener(
-            "click",
-            () => {
+            heart.remove();
 
-                caught++;
+            status.textContent =
+                `Hearts caught: ${caught} / 10`;
 
-                score.textContent =
-                    `Hearts caught: ${caught} / ${game.target}`;
+            if (caught >= 10) {
+                status.textContent =
+                    "You caught all my hearts. 🥹💛";
 
-                heart.remove();
-
-                if (
-                    caught >=
-                    game.target
-                ) {
-
-                    score.textContent =
-                        game.message ||
-                        "You caught all my hearts. ♡";
-
-                } else {
-
-                    spawnHeart();
-                }
+                completeSurpriseButton.disabled = false;
+            } else {
+                createHeart();
             }
-        );
+        });
 
-        playArea.appendChild(
-            heart
-        );
+        area.appendChild(heart);
     }
 
-    spawnHeart();
+    completeSurpriseButton.disabled = true;
 
-    surpriseContent.appendChild(
-        wrapper
-    );
+    for (let i = 0; i < 3; i++) {
+        createHeart();
+    }
 }
-
 
 /* ============================================================
    COUPON
 ============================================================ */
 
 function renderCoupon(surprise) {
+    const coupon = surprise.coupon || {};
 
-    const coupon =
-        surprise.coupon;
+    surpriseContent.innerHTML = `
+        <div class="coupon-card">
+            <div class="coupon-icon">${coupon.icon || "🎟️"}</div>
 
-    if (!coupon) {
-        renderFutureSurprise(surprise);
-        return;
-    }
+            <h3>${coupon.title || "A Little Coupon For You"}</h3>
 
-    const card =
-        document.createElement("div");
+            <p>${coupon.description || "Redeem this whenever you want. ♡"}</p>
 
-    card.className =
-        "coupon-card";
+            <button class="surprise-action" id="revealCouponButton">
+                Open Coupon 💌
+            </button>
 
-    const title =
-        document.createElement("h3");
+            <div id="couponReveal" class="mini-message"></div>
+        </div>
+    `;
 
-    title.textContent =
-        coupon.title;
+    const revealButton = document.getElementById("revealCouponButton");
+    const couponReveal = document.getElementById("couponReveal");
 
-    card.appendChild(title);
+    revealButton.addEventListener("click", () => {
+        couponReveal.textContent =
+            "Officially approved by Shru. Valid whenever you need a little love. ♡";
 
-    const text =
-        document.createElement("p");
+        revealButton.textContent = "Coupon opened! 💛";
+        revealButton.disabled = true;
 
-    text.textContent =
-        coupon.text;
+        completeSurpriseButton.disabled = false;
+    });
 
-    card.appendChild(text);
-
-    const stamp =
-        document.createElement("div");
-
-    stamp.className =
-        "coupon-stamp";
-
-    stamp.textContent =
-        coupon.stamp;
-
-    card.appendChild(stamp);
-
-    surpriseContent.appendChild(
-        card
-    );
+    completeSurpriseButton.disabled = true;
 }
 
 
@@ -952,74 +845,53 @@ function renderCoupon(surprise) {
 ============================================================ */
 
 function renderMemoryQuestion(surprise) {
+    const question = surprise.question || "";
+    const choices = surprise.choices || [];
+    const correctIndex = surprise.correctIndex;
 
-    const question =
-        surprise.question;
+    surpriseContent.innerHTML = `
+        <div class="memory-question">
+            <div class="question-icon">💭</div>
 
-    if (!question) {
-        renderFutureSurprise(surprise);
-        return;
-    }
+            <h3>${question}</h3>
 
-    const wrapper =
-        document.createElement("div");
+            <div class="question-options" id="questionOptions">
+                ${choices.map((choice, index) => `
+                    <button class="question-option" data-index="${index}">
+                        ${choice}
+                    </button>
+                `).join("")}
+            </div>
 
-    wrapper.className =
-        "question-container";
+            <div id="questionResult" class="mini-message"></div>
+        </div>
+    `;
 
-    const questionText =
-        document.createElement("h3");
+    const options = document.querySelectorAll(".question-option");
+    const result = document.getElementById("questionResult");
 
-    questionText.textContent =
-        question.text;
+    options.forEach(option => {
+        option.addEventListener("click", () => {
+            const selectedIndex = Number(option.dataset.index);
 
-    wrapper.appendChild(
-        questionText
-    );
+            options.forEach(button => {
+                button.disabled = true;
+            });
 
-    const result =
-        document.createElement("p");
+            if (selectedIndex === correctIndex) {
+                option.classList.add("correct");
+                result.textContent = "You got it! You really know us. ♡";
+            } else {
+                option.classList.add("wrong");
+                result.textContent =
+                    `Not quite! The answer was "${choices[correctIndex]}". ♡`;
+            }
 
-    result.className =
-        "question-result";
+            completeSurpriseButton.disabled = false;
+        });
+    });
 
-    wrapper.appendChild(
-        result
-    );
-
-    question.options.forEach(
-        (option, index) => {
-
-            const button =
-                createButton(
-                    option,
-                    () => {
-
-                        if (
-                            index ===
-                            question.correct
-                        ) {
-
-                            result.textContent =
-                                question.correctMessage;
-
-                        } else {
-
-                            result.textContent =
-                                question.wrongMessage;
-                        }
-                    }
-                );
-
-            wrapper.appendChild(
-                button
-            );
-        }
-    );
-
-    surpriseContent.appendChild(
-        wrapper
-    );
+    completeSurpriseButton.disabled = true;
 }
 
 
@@ -1027,137 +899,81 @@ function renderMemoryQuestion(surprise) {
    REAL LIFE SURPRISE
 ============================================================ */
 
+
 function renderRealLife(surprise) {
+    surpriseContent.innerHTML = `
+        <div class="real-life-surprise">
+            <div class="reward-icon">
+                ${surprise.icon || "🎁"}
+            </div>
 
-    const reward =
-        surprise.reward;
+            <h3>${surprise.reward || "A Little Something For You"}</h3>
 
-    const wrapper =
-        document.createElement("div");
+            <p>${surprise.message || "I have something special planned for you. ♡"}</p>
 
-    wrapper.className =
-        "real-life-card";
+            <button class="surprise-action" id="revealRewardButton">
+                Reveal your clue 👀
+            </button>
 
-    if (reward) {
+            <div id="rewardClue" class="mini-message"></div>
+        </div>
+    `;
 
-        const title =
-            document.createElement("h3");
+    const revealButton = document.getElementById("revealRewardButton");
+    const rewardClue = document.getElementById("rewardClue");
 
-        title.textContent =
-            reward.title || "";
+    revealButton.addEventListener("click", () => {
+        rewardClue.textContent =
+            surprise.clue || "Your surprise is waiting for you. ♡";
 
-        wrapper.appendChild(title);
+        revealButton.textContent = "Clue revealed! 🎀";
+        revealButton.disabled = true;
 
-        const message =
-            document.createElement("p");
+        completeSurpriseButton.disabled = false;
+    });
 
-        message.textContent =
-            reward.message || "";
-
-        wrapper.appendChild(message);
-
-        const revealButton =
-            createButton(
-                "REVEAL MY CLUE 👀",
-                () => {
-
-                    const clue =
-                        document.createElement("p");
-
-                    clue.className =
-                        "reward-reveal";
-
-                    clue.textContent =
-                        reward.reveal || "";
-
-                    wrapper.appendChild(
-                        clue
-                    );
-
-                    revealButton.disabled =
-                        true;
-                }
-            );
-
-        wrapper.appendChild(
-            revealButton
-        );
-    }
-
-    surpriseContent.appendChild(
-        wrapper
-    );
+    completeSurpriseButton.disabled = true;
 }
-
 
 /* ============================================================
    MUSIC SURPRISE
 ============================================================ */
 
 function renderMusicSurprise(surprise) {
+    surpriseContent.innerHTML = `
+        <div class="music-surprise">
+            <div class="music-icon">🎸</div>
 
-    const music =
-        surprise.music;
+            <h3>${surprise.title || "Our Little Music Room"}</h3>
 
-    const wrapper =
-        document.createElement("div");
+            <p>${surprise.message || "I have something hidden in this song for you. ♡"}</p>
 
-    wrapper.className =
-        "music-surprise";
+            <button class="surprise-action" id="playMusicSurpriseButton">
+                Play our little song 🎶
+            </button>
 
-    const message =
-        document.createElement("p");
+            <div id="musicSurpriseMessage" class="mini-message"></div>
+        </div>
+    `;
 
-    message.textContent =
-        music?.message ||
-        "Press play and stay here for a little while.";
+    const button = document.getElementById("playMusicSurpriseButton");
+    const message = document.getElementById("musicSurpriseMessage");
 
-    wrapper.appendChild(
-        message
-    );
+    button.addEventListener("click", () => {
+        if (backgroundMusic) {
+            backgroundMusic.play().catch(() => {});
+        }
 
-    const button =
-        createButton(
-            "♫ PLAY OUR SONG",
-            async () => {
+        message.textContent =
+            surprise.caption || "Some songs just feel like us. ♡";
 
-                try {
+        button.textContent = "Playing for us 🎶";
+        button.disabled = true;
 
-                    await backgroundMusic.play();
+        completeSurpriseButton.disabled = false;
+    });
 
-                    musicToggle.textContent =
-                        "♫ ON";
-
-                } catch (error) {
-
-                    console.log(
-                        "Music could not autoplay:",
-                        error
-                    );
-                }
-            }
-        );
-
-    wrapper.appendChild(
-        button
-    );
-
-    const caption =
-        document.createElement("p");
-
-    caption.className =
-        "music-caption";
-
-    caption.textContent =
-        music?.caption || "";
-
-    wrapper.appendChild(
-        caption
-    );
-
-    surpriseContent.appendChild(
-        wrapper
-    );
+    completeSurpriseButton.disabled = true;
 }
 
 
@@ -1166,154 +982,577 @@ function renderMusicSurprise(surprise) {
 ============================================================ */
 
 function renderPuzzle(surprise) {
+    surpriseContent.innerHTML = `
+        <div class="puzzle-surprise">
+            <div class="puzzle-icon">🧩</div>
 
-    const puzzle =
-        surprise.puzzle;
+            <h3>${surprise.question || "Solve this little puzzle ♡"}</h3>
 
-    if (!puzzle) {
-        renderFutureSurprise(surprise);
-        return;
+            <input
+                type="text"
+                id="puzzleAnswer"
+                class="puzzle-input"
+                placeholder="Type your answer..."
+                autocomplete="off"
+            >
+
+            <button class="surprise-action" id="checkPuzzleButton">
+                Check Answer ✨
+            </button>
+
+            <div id="puzzleHint" class="mini-message"></div>
+        </div>
+    `;
+
+    const answerInput = document.getElementById("puzzleAnswer");
+    const checkButton = document.getElementById("checkPuzzleButton");
+    const hint = document.getElementById("puzzleHint");
+
+    checkButton.addEventListener("click", () => {
+        const answer = answerInput.value.trim().toLowerCase();
+        const correctAnswer = String(surprise.answer || "").trim().toLowerCase();
+
+        if (answer === correctAnswer) {
+            hint.textContent =
+                surprise.success || "You solved it! 🥹♡";
+
+            answerInput.disabled = true;
+            checkButton.textContent = "Solved! 🧩";
+            checkButton.disabled = true;
+
+            completeSurpriseButton.disabled = false;
+        } else {
+            hint.textContent =
+                surprise.hint || "Hmm... try again. 👀";
+        }
+    });
+
+    completeSurpriseButton.disabled = true;
+}
+
+function renderPandaDelivery(surprise) {
+    const tasks = [
+        "Give me a tiny compliment ♡",
+        "Send me a virtual hug 🤗",
+        "Smile for 5 seconds because I said so 😌"
+    ];
+
+    surpriseContent.innerHTML = `
+        <div class="panda-delivery">
+            <div class="panda-icon">🐼</div>
+
+            <h3>${surprise.title || "Panda Delivery!"}</h3>
+
+            <p>${surprise.message || "Your tiny panda has three deliveries for you. ♡"}</p>
+
+            <div id="pandaTasks">
+                ${tasks.map((task, index) => `
+                    <button class="panda-task" data-index="${index}">
+                        ${index + 1}. ${task}
+                    </button>
+                `).join("")}
+            </div>
+
+            <div id="pandaStatus" class="mini-message">
+                Complete all 3 tasks 🐼
+            </div>
+        </div>
+    `;
+
+    const taskButtons = document.querySelectorAll(".panda-task");
+    const status = document.getElementById("pandaStatus");
+
+    let completed = 0;
+
+    taskButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            if (button.disabled) return;
+
+            button.disabled = true;
+            button.classList.add("completed");
+
+            completed++;
+
+            if (completed === 3) {
+                status.textContent =
+                    "Panda delivery complete! 🐼💛";
+
+                completeSurpriseButton.disabled = false;
+            } else {
+                status.textContent =
+                    `${completed} / 3 completed. Keep going! ♡`;
+            }
+        });
+    });
+
+    completeSurpriseButton.disabled = true;
+}
+
+function renderLoveCards(surprise) {
+    const things = surprise.items || [
+        "The way you remember tiny things.",
+        "The way you make me laugh.",
+        "The way you show up for me.",
+        "Your ridiculously cute expressions.",
+        "The way you listen.",
+        "Your patience with me.",
+        "Your smile.",
+        "The way you care.",
+        "Your silly side.",
+        "The way you make ordinary days special.",
+        "Your honesty.",
+        "Your hugs.",
+        "The way you encourage me.",
+        "Your voice.",
+        "The way you look at me.",
+        "Your little habits.",
+        "The way you make me feel safe.",
+        "Your heart.",
+        "Simply... you. ♡"
+    ];
+
+    surpriseContent.innerHTML = `
+        <div class="love-cards">
+            <div class="love-cards-icon">💛</div>
+
+            <h3>19 Things I Love About You</h3>
+
+            <p>Open them one by one. ♡</p>
+
+            <div id="loveCard" class="love-card">
+                Tap to reveal
+            </div>
+
+            <button class="surprise-action" id="nextLoveCard">
+                Reveal #1 💌
+            </button>
+
+            <div id="loveCardCounter" class="mini-message">
+                0 / ${things.length}
+            </div>
+        </div>
+    `;
+
+    const card = document.getElementById("loveCard");
+    const button = document.getElementById("nextLoveCard");
+    const counter = document.getElementById("loveCardCounter");
+
+    let index = 0;
+
+    completeSurpriseButton.disabled = true;
+
+    button.addEventListener("click", () => {
+        card.textContent = things[index];
+        card.classList.add("revealed");
+
+        index++;
+
+        counter.textContent = `${index} / ${things.length}`;
+
+        if (index < things.length) {
+            button.textContent = `Reveal #${index + 1} 💌`;
+        } else {
+            button.textContent = "All 19 revealed ♡";
+            button.disabled = true;
+            completeSurpriseButton.disabled = false;
+        }
+    });
+}
+
+function renderMysteryBox(surprise) {
+    surpriseContent.innerHTML = `
+        <div class="mystery-box-surprise">
+            <div id="mysteryBoxIcon" class="mystery-box-icon">📦</div>
+
+            <h3>${surprise.title || "A Mystery Box For You"}</h3>
+
+            <p>${surprise.message || "Something tiny is hiding inside..."}</p>
+
+            <button class="surprise-action" id="openMysteryBoxButton">
+                Open the box 👀
+            </button>
+
+            <div id="mysteryReveal" class="mini-message"></div>
+        </div>
+    `;
+
+    const box = document.getElementById("mysteryBoxIcon");
+    const button = document.getElementById("openMysteryBoxButton");
+    const reveal = document.getElementById("mysteryReveal");
+
+    completeSurpriseButton.disabled = true;
+
+    button.addEventListener("click", () => {
+        box.textContent = surprise.collectibleIcon || "✨";
+
+        reveal.textContent =
+            surprise.reveal ||
+            "You found the little collectible! Keep it safe. ♡";
+
+        button.textContent = "Opened! ✨";
+        button.disabled = true;
+
+        completeSurpriseButton.disabled = false;
+    });
+}
+function renderTimeline(surprise) {
+    const paragraphs = surprise.letter?.paragraphs || [];
+
+    surpriseContent.innerHTML = `
+        <div class="timeline-surprise">
+            <div class="timeline-icon">🏆</div>
+
+            <h3>${surprise.title || "Our Journey ♡"}</h3>
+
+            <p>Scroll through our little journey.</p>
+
+            <div class="timeline-container">
+                ${paragraphs.map((paragraph, index) => `
+                    <button class="timeline-card" data-index="${index}">
+                        <span class="timeline-number">
+                            ${index + 1}
+                        </span>
+
+                        <span class="timeline-text">
+                            ${paragraph}
+                        </span>
+                    </button>
+                `).join("")}
+            </div>
+
+            <div id="timelineProgress" class="mini-message">
+                0 / ${paragraphs.length} memories opened
+            </div>
+        </div>
+    `;
+
+    const cards = document.querySelectorAll(".timeline-card");
+    const progress = document.getElementById("timelineProgress");
+
+    let opened = 0;
+
+    completeSurpriseButton.disabled = true;
+
+    cards.forEach(card => {
+        card.addEventListener("click", () => {
+            if (card.classList.contains("opened")) return;
+
+            card.classList.add("opened");
+            opened++;
+
+            progress.textContent =
+                `${opened} / ${paragraphs.length} memories opened`;
+
+            if (opened === paragraphs.length) {
+                progress.textContent =
+                    "You reached Day 25. Look how far we've come. 🥹💛";
+
+                completeSurpriseButton.disabled = false;
+            }
+        });
+    });
+}
+function renderPicnic(surprise) {
+
+    surpriseContent.innerHTML = `
+        <div class="picnic-surprise">
+
+            <div class="picnic-scene" id="picnicScene">
+
+                <div
+                    class="picnic-item picnic-blanket"
+                    data-item="blanket"
+                >
+                    🧺
+                </div>
+
+                <div
+                    class="picnic-item picnic-snacks"
+                    data-item="snacks"
+                >
+                    🍓
+                </div>
+
+                <div
+                    class="picnic-item picnic-music"
+                    data-item="music"
+                >
+                    🎵
+                </div>
+
+                <div
+                    class="picnic-item picnic-lights"
+                    data-item="lights"
+                >
+                    🌙
+                </div>
+
+                <div class="picnic-center">
+                    <span>Our tiny date night</span>
+                    <small>Bring everything onto the blanket ♡</small>
+                </div>
+
+            </div>
+
+            <div
+                id="picnicStatus"
+                class="mini-message"
+            >
+                0 / 4 pieces placed
+            </div>
+
+        </div>
+    `;
+
+    const scene =
+        document.getElementById("picnicScene");
+
+    const status =
+        document.getElementById("picnicStatus");
+
+    const items =
+        scene.querySelectorAll(".picnic-item");
+
+    let placed = 0;
+    let activeItem = null;
+
+    const targetPositions = {
+        blanket: {
+            left: "40%",
+            top: "48%"
+        },
+
+        snacks: {
+            left: "53%",
+            top: "43%"
+        },
+
+        music: {
+            left: "38%",
+            top: "62%"
+        },
+
+        lights: {
+            left: "55%",
+            top: "62%"
+        }
+    };
+
+    function finishItem(item) {
+
+        if (item.classList.contains("placed")) {
+            return;
+        }
+
+        const name =
+            item.dataset.item;
+
+        const position =
+            targetPositions[name];
+
+        if (!position) {
+            return;
+        }
+
+        item.style.left =
+            position.left;
+
+        item.style.top =
+            position.top;
+
+        item.classList.add("placed");
+
+        placed++;
+
+        status.textContent =
+            `${placed} / 4 pieces placed`;
+
+        if (placed === 4) {
+
+            status.textContent =
+                "Date night complete. Come sit beside me. 🌙🧺💛";
+
+            completeSurpriseButton.disabled =
+                false;
+        }
     }
 
-    const wrapper =
-        document.createElement("div");
+    items.forEach(item => {
 
-    wrapper.className =
-        "puzzle-container";
-
-    const question =
-        document.createElement("h3");
-
-    question.textContent =
-        puzzle.question;
-
-    wrapper.appendChild(
-        question
-    );
-
-    const input =
-        document.createElement("input");
-
-    input.type = "text";
-    input.placeholder =
-        "Your answer...";
-
-    wrapper.appendChild(
-        input
-    );
-
-    const result =
-        document.createElement("p");
-
-    wrapper.appendChild(
-        result
-    );
-
-    const button =
-        createButton(
-            "CHECK ANSWER ♡",
-            () => {
-
-                const answer =
-                    input.value
-                        .trim()
-                        .toLowerCase();
+        item.addEventListener(
+            "pointerdown",
+            event => {
 
                 if (
-                    answer ===
-                    String(
-                        puzzle.answer
-                    ).toLowerCase()
+                    item.classList.contains("placed")
                 ) {
+                    return;
+                }
 
-                    result.textContent =
-                        puzzle.success ||
-                        "Correct ♡";
+                activeItem = item;
 
-                    button.disabled =
-                        true;
+                item.setPointerCapture(
+                    event.pointerId
+                );
 
-                    input.disabled =
-                        true;
+                item.classList.add(
+                    "dragging"
+                );
 
-                } else {
+                event.preventDefault();
+            }
+        );
 
-                    result.textContent =
-                        puzzle.hint ||
-                        "Try again 👀";
+        item.addEventListener(
+            "pointermove",
+            event => {
+
+                if (
+                    activeItem !== item ||
+                    item.classList.contains("placed")
+                ) {
+                    return;
+                }
+
+                const rect =
+                    scene.getBoundingClientRect();
+
+                const x =
+                    event.clientX -
+                    rect.left -
+                    item.offsetWidth / 2;
+
+                const y =
+                    event.clientY -
+                    rect.top -
+                    item.offsetHeight / 2;
+
+                const maxX =
+                    scene.clientWidth -
+                    item.offsetWidth;
+
+                const maxY =
+                    scene.clientHeight -
+                    item.offsetHeight;
+
+                item.style.left =
+                    `${Math.max(
+                        0,
+                        Math.min(x, maxX)
+                    )}px`;
+
+                item.style.top =
+                    `${Math.max(
+                        0,
+                        Math.min(y, maxY)
+                    )}px`;
+            }
+        );
+
+        item.addEventListener(
+            "pointerup",
+            event => {
+
+                if (activeItem !== item) {
+                    return;
+                }
+
+                activeItem = null;
+
+                item.classList.remove(
+                    "dragging"
+                );
+
+                try {
+                    item.releasePointerCapture(
+                        event.pointerId
+                    );
+                } catch (error) {
+                    /* Pointer already released */
+                }
+
+                const itemRect =
+                    item.getBoundingClientRect();
+
+                const centerRect =
+                    scene
+                        .querySelector(".picnic-center")
+                        .getBoundingClientRect();
+
+                const itemCenterX =
+                    itemRect.left +
+                    itemRect.width / 2;
+
+                const itemCenterY =
+                    itemRect.top +
+                    itemRect.height / 2;
+
+                const insideCenter =
+                    itemCenterX >= centerRect.left &&
+                    itemCenterX <= centerRect.right &&
+                    itemCenterY >= centerRect.top &&
+                    itemCenterY <= centerRect.bottom;
+
+                if (insideCenter) {
+                    finishItem(item);
                 }
             }
         );
 
-    wrapper.appendChild(
-        button
-    );
+        item.addEventListener(
+            "pointercancel",
+            () => {
 
-    surpriseContent.appendChild(
-        wrapper
-    );
+                activeItem = null;
+
+                item.classList.remove(
+                    "dragging"
+                );
+            }
+        );
+    });
+
+    completeSurpriseButton.disabled = true;
 }
-
-
 /* ============================================================
    FUTURE / FALLBACK SURPRISE
 ============================================================ */
 
 function renderFutureSurprise(surprise) {
+    surpriseContent.innerHTML = `
+        <div class="future-surprise">
+            <div class="future-icon">
+                ${surprise.icon || "🎁"}
+            </div>
 
-    const wrapper =
-        document.createElement("div");
+            <h3>${surprise.title || "A Little Secret For You"}</h3>
 
-    wrapper.className =
-        "future-surprise";
+            <p>${surprise.message || "There is something waiting for you. ♡"}</p>
 
-    const icon =
-        document.createElement("div");
+            <button class="surprise-action" id="revealFutureButton">
+                Open it 👀
+            </button>
 
-    icon.className =
-        "future-icon";
+            <div id="futureReveal" class="mini-message"></div>
+        </div>
+    `;
 
-    icon.textContent =
-        surprise.icon ||
-        "💛";
+    const button = document.getElementById("revealFutureButton");
+    const reveal = document.getElementById("futureReveal");
 
-    wrapper.appendChild(
-        icon
-    );
+    button.addEventListener("click", () => {
+        reveal.textContent =
+            surprise.clue ||
+            "It's one of those little moments I secretly keep close to my heart. ♡";
 
-    const message =
-        document.createElement("p");
+        button.textContent = "Opened! 💛";
+        button.disabled = true;
 
-    message.textContent =
-        surprise.message ||
-        "I wanted to leave you a little reminder today. ♡";
+        completeSurpriseButton.disabled = false;
+    });
 
-    wrapper.appendChild(
-        message
-    );
-
-    const button =
-        createButton(
-            "I FOUND MY LITTLE SURPRISE ♡",
-            () => {
-
-                button.textContent =
-                    "SAVED ♡";
-
-                button.disabled =
-                    true;
-            }
-        );
-
-    wrapper.appendChild(
-        button
-    );
-
-    surpriseContent.appendChild(
-        wrapper
-    );
+    completeSurpriseButton.disabled = true;
 }
-
 
 /* ============================================================
    COMPLETE TODAY'S SURPRISE
@@ -1487,13 +1726,13 @@ function renderMemoryBox() {
        INSIDE memoryBox.
     */
 
-    memoryBox
-        .querySelectorAll(
-            ".memory-object"
-        )
-        .forEach(
-            object => object.remove()
-        );
+       memoryBoxInside
+    .querySelectorAll(
+        ".memory-object"
+    )
+    .forEach(
+        object => object.remove()
+    );
 
 
     /* EMPTY MEMORY BOX */
@@ -1634,9 +1873,9 @@ function createMemoryObject(
     );
 
 
-    memoryBox.appendChild(
-        object
-    );
+   memoryBoxInside.appendChild(
+    object
+);
 }
 
 
@@ -1816,7 +2055,7 @@ async function revisitMemory(day) {
 
         renderSurprise(surprise);
 
-        showScreen("surprise");
+        showScreen(surpriseScreen);
 
     } catch (error) {
 
@@ -1989,7 +2228,10 @@ if (memoryBoxButton) {
     );
 }
 
-
+memoryBackButton.addEventListener("click", () => {
+    viewingOldMemory = false;
+    showScreen(homeScreen);
+});
 if (backHomeButton) {
 
     backHomeButton.addEventListener(

@@ -1,0 +1,17 @@
+{
+  "name": "Shru & Shravya",
+  "short_name": "Shru & Shravya",
+  "description": "A little surprise from Shru, every day. ♡",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff8e8",
+  "theme_color": "#fff8e8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/pandas/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

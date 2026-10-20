@@ -12,6 +12,38 @@
 
     <title>Shru & Shravya ♡</title>
 
+    <meta
+        name="description"
+        content="A little surprise from Shru, every day. ♡"
+    >
+
+    <!-- PWA -->
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#fff8e8"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="Shru & Shravya"
+    >
+
+    <!-- Main stylesheet -->
     <link
         rel="stylesheet"
         href="style.css"
@@ -24,83 +56,36 @@
 
 
     <!-- =====================================================
-         FLOATING BACKGROUND
-    ====================================================== -->
-
-    <div
-        class="floating-hearts"
-        aria-hidden="true"
-    >
-        <span>♡</span>
-        <span>♡</span>
-        <span>♡</span>
-        <span>♡</span>
-        <span>♡</span>
-        <span>♡</span>
-    </div>
-
-
-
-    <!-- =====================================================
-         FIXED TOP BAR
+         TOP BAR
     ====================================================== -->
 
     <header class="top-bar">
 
+        <div class="top-bar-left">
 
-        <!-- DAY -->
+            <div
+                id="dayNumber"
+                class="day-counter"
+            >
+                DAY 001 / 365
+            </div>
 
-        <div class="day-counter">
-
-            <span class="day-counter-label">
-                DAY
-            </span>
-
-            <span id="dayNumber">
-                001
-            </span>
-
-            <span class="day-counter-total">
-                / 365
-            </span>
-
-        </div>
-
-
-
-        <!-- COUNTDOWN -->
-
-        <div
-            class="countdown-container"
-            id="countdownContainer"
-        >
-
-            <span class="countdown-label">
-                NEXT SURPRISE IN
-            </span>
-
-            <span
+            <div
                 id="countdownTimer"
-                class="countdown-time"
+                class="countdown-timer"
             >
                 00:00:00
-            </span>
+            </div>
 
         </div>
 
-
-
-        <!-- RIGHT SIDE -->
 
         <div class="top-bar-actions">
 
-
-            <!-- MEMORY BOX -->
-
             <button
-                type="button"
                 id="memoryBoxButton"
                 class="icon-button"
+                type="button"
                 aria-label="Open Memory Box"
                 title="Memory Box"
             >
@@ -108,19 +93,15 @@
             </button>
 
 
-
-            <!-- MUSIC -->
-
             <button
-                type="button"
                 id="musicToggle"
                 class="music-toggle"
+                type="button"
                 aria-label="Toggle music"
                 title="Music"
             >
                 ♫
             </button>
-
 
         </div>
 
@@ -129,7 +110,7 @@
 
 
     <!-- =====================================================
-         HOME SCREEN
+         HOME
     ====================================================== -->
 
     <main
@@ -137,127 +118,102 @@
         class="screen active"
     >
 
-        <section class="home-content">
+        <div class="home-content">
 
-
-            <div class="panda panda-left">
+            <div class="panda-decoration panda-home">
                 🐼
             </div>
 
+            <h1>
+                Hey, Shravya.
+            </h1>
 
-            <div class="panda panda-right">
-                🐼
-            </div>
-
-
-
-            <div class="home-text">
-
-                <p class="tiny-intro">
-                    A little world made for you
-                </p>
-
-                <h1>
-                    Hey, Shravya.
-                </h1>
-
-                <p class="home-subtitle">
-                    I left something for you today. ♡
-                </p>
-
-            </div>
-
-
-
-            <!-- PRESENT -->
-
-            <div
-                id="present"
-                class="present"
-                tabindex="0"
-                role="button"
-                aria-label="Open today's present"
-            >
-
-                <div class="present-shadow"></div>
-
-
-                <div class="present-lid">
-
-                    <div class="lid-ribbon"></div>
-
-
-                    <div class="bow">
-
-                        <span class="bow-left"></span>
-
-                        <span class="bow-right"></span>
-
-                        <span class="bow-center"></span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="present-box">
-
-                    <div class="box-ribbon"></div>
-
-                </div>
-
-            </div>
-
-
+            <p class="home-message">
+                I left something for you today. ♡
+            </p>
 
             <button
-                type="button"
                 id="openSurpriseButton"
-                class="main-button"
+                class="primary-button"
+                type="button"
             >
-                OPEN TODAY'S SURPRISE
+                🎁 OPEN TODAY'S SURPRISE
             </button>
 
-
-        </section>
+        </div>
 
     </main>
 
 
 
     <!-- =====================================================
-         SURPRISE SCREEN
+         SURPRISE
     ====================================================== -->
 
-    <main
+    <section
         id="surpriseScreen"
         class="screen"
     >
 
-        <section class="surprise-section">
+        <div class="surprise-page">
 
+            <div class="surprise-heading">
 
-            <div class="panda-small">
-                🐼
+                <div
+                    id="surpriseDayLabel"
+                    class="small-label"
+                ></div>
+
+                <h2 id="surpriseTitle">
+                    A Little Surprise ♡
+                </h2>
+
+                <p id="surpriseDescription">
+                </p>
+
             </div>
 
 
-            <p class="surprise-day-label">
-                TODAY'S LITTLE THING
-            </p>
+            <!-- PRESENT -->
 
-
-            <h2 id="surpriseTitle">
-                A Little Surprise ♡
-            </h2>
-
-
-            <p
-                id="surpriseDescription"
-                class="surprise-description"
+            <div
+                id="present"
+                class="present-area"
             >
-            </p>
 
+                <button
+                    id="presentButton"
+                    class="present-button"
+                    type="button"
+                    aria-label="Open present"
+                >
+
+                    <span class="present-box">
+
+                        <span class="present-lid">
+                        </span>
+
+                        <span class="present-body">
+                        </span>
+
+                        <span class="present-ribbon-vertical">
+                        </span>
+
+                        <span class="present-ribbon-horizontal">
+                        </span>
+
+                        <span class="present-bow">
+                            🎀
+                        </span>
+
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- SURPRISE CONTENT -->
 
             <div
                 id="surpriseContent"
@@ -266,177 +222,165 @@
             </div>
 
 
-            <button
-                type="button"
-                id="completeSurpriseButton"
-                class="main-button hidden"
+            <!-- COMPLETION -->
+
+            <div
+                id="completionArea"
+                class="completion-area"
             >
-                I FOUND IT ♡
+
+                <button
+                    id="completeSurpriseButton"
+                    class="primary-button"
+                    type="button"
+                >
+                    I FOUND IT ♡
+                </button>
+
+            </div>
+
+
+            <!-- BACK HOME -->
+
+            <button
+                id="backHomeButton"
+                class="text-button"
+                type="button"
+            >
+                ← Back home
             </button>
 
+        </div>
 
-        </section>
+    </section>
 
-    </main>
-
-
-
+    
     <!-- =====================================================
-         PORTAL SCREEN
+         PORTAL
     ====================================================== -->
 
-    <main
+    <section
         id="portalScreen"
         class="screen"
     >
 
-        <section class="portal-section">
+        <div class="portal-page">
 
+            <div
+                id="portal"
+                class="portal"
+            >
 
-            <div class="panda-small">
-                🐼
-            </div>
+                <div class="portal-glow">
+                </div>
 
+                <div class="portal-ring">
+                </div>
 
-            <p class="portal-small-text">
-                Something is joining your little world...
-            </p>
-
-
-
-            <div class="magic-portal">
-
-                <div class="portal-ring ring-one"></div>
-
-                <div class="portal-ring ring-two"></div>
-
-                <div class="portal-ring ring-three"></div>
-
-
+                <!-- app.js expects THIS exact ID -->
                 <div
                     id="memoryObjectPreview"
-                    class="memory-object-preview"
+                    class="portal-memory-object"
                 >
-                    💛
                 </div>
 
             </div>
 
 
-
             <h2>
-                A new memory appeared. ♡
+                A new memory found. ♡
             </h2>
 
-
             <p>
-                Your little world is growing.
+                I'm keeping this one for us.
             </p>
 
+        </div>
 
-        </section>
-
-    </main>
+    </section>
 
 
 
     <!-- =====================================================
-         MEMORY BOX SCREEN
+         MEMORY BOX
     ====================================================== -->
 
-    <main
+    <section
         id="memoryScreen"
-        class="screen memory-screen"
+        class="screen"
     >
 
-        <section class="memory-section">
-
-
-            <!-- HEADER -->
+        <div class="memory-page">
 
             <div class="memory-heading">
 
-                <div class="memory-panda">
+                <div class="panda-decoration">
                     🐼
                 </div>
 
+                <h2>
+                    Our Memory Box
+                </h2>
 
-                <div>
-
-                    <p class="memory-small-title">
-                        OUR LITTLE WORLD
-                    </p>
-
-                    <h2>
-                        Memory Box
-                    </h2>
-
-                </div>
+                <p>
+                    Every little thing we collect stays here. ♡
+                </p>
 
             </div>
 
-
-
-            <p class="memory-description">
-                Drag your memories around. Double-click one to revisit that day. ♡
-            </p>
-
-
-
-            <!-- MEMORY BOX -->
 
             <div
                 id="memoryBox"
                 class="memory-box"
             >
 
-                <div class="memory-box-inside">
-                </div>
-
-
-                <!-- EMPTY STATE -->
-
                 <div
-                    id="emptyMemoryMessage"
-                    class="empty-memory-message"
+                    id="memoryBoxInside"
+                    class="memory-box-inside"
                 >
 
-                    <div class="empty-memory-icon">
-                        🎀
+                    <div
+                        id="emptyMemoryMessage"
+                        class="empty-memory-message"
+                    >
+
+                        <span class="empty-memory-icon">
+                            📦
+                        </span>
+
+                        <span>
+                            It's empty right now...
+                        </span>
+
+                        <span>
+                            Let's fill it together. ♡
+                        </span>
+
                     </div>
-
-                    <p>
-                        It’s empty right now...
-                    </p>
-
-                    <span>
-                        Let’s fill it together. ♡
-                    </span>
 
                 </div>
 
             </div>
 
 
-
-            <!-- BACK BUTTON -->
-
-            <div class="memory-back-area">
+            <div
+                id="memoryBackArea"
+                class="memory-back-area"
+            >
 
                 <button
+                    id="memoryBackButton"
+                    class="text-button"
                     type="button"
-                    id="backHomeButton"
-                    class="secondary-button memory-back-button"
                 >
-                    ← Back to today
+                    ← Back
                 </button>
 
             </div>
 
+        </div>
 
-        </section>
-
-    </main>
+    </section>
 
 
 
@@ -451,7 +395,7 @@
     >
 
         <source
-            src="assets/music/perfect-acoustic.mp3"
+            src="assets/music/perfect-acoustic.mp3"  
             type="audio/mpeg"
         >
 
@@ -460,10 +404,8 @@
 
 
     <!-- =====================================================
-         JAVASCRIPT
+         APP
     ====================================================== -->
-
-
 
     <script src="app.js"></script>
 

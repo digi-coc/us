@@ -575,7 +575,7 @@ const dailySurprises = {
     // ========================================================
 
     19: {
-        type: "choice",
+        type: "love-cards",
         title: "19 Things I Love About You ♡",
         description: "Open the little cards one choice at a time.",
         interaction: "choice",
@@ -713,15 +713,15 @@ const dailySurprises = {
     // ========================================================
 
     23: {
-        type: "future",
+        type: "mystery-box",
         title: "Mystery Box 📦",
-        description: "Something tiny is hiding inside.",
-        interaction: "future",
+        message: "Something tiny is hiding inside.",
+        interaction: "mystery-box",
 
-        message:
-            "You opened the mystery box. Inside is one tiny virtual collectible: a little golden key to our world. 🔑",
+        collectibleIcon: "🔑",
 
-        icon: "🔑",
+reveal:
+    "You found the little golden key to our world. Keep it safe. ♡",
 
         memory: {
             name: "Golden Mystery Key",
@@ -777,7 +777,7 @@ const dailySurprises = {
     // ========================================================
 
     25: {
-        type: "letter",
+        type: "timeline",
         title: "Our First Big Memory ♡",
         description: "Look how far we've already come.",
         interaction: "letter",
@@ -857,10 +857,10 @@ const dailySurprises = {
     // ========================================================
 
     27: {
-        type: "heart-game",
+        type: "compliment-vault",
         title: "Secret Compliment Vault 🔐",
         description: "Find 5 hidden keys to unlock the vault.",
-        interaction: "heart-game",
+        interaction: "compliment-vault",
 
         game: {
             target: 5,
@@ -883,10 +883,10 @@ const dailySurprises = {
     // ========================================================
 
     28: {
-        type: "choice",
-        title: "Build Our Tiny Date Night 🌙",
-        description: "Choose what our little virtual picnic gets first.",
-        interaction: "choice",
+        type: "picnic",
+title: "Build Our Tiny Date Night 🌙",
+description: "Drag everything into place and make our little date night.",
+interaction: "picnic",
 
         choices: [
             {
